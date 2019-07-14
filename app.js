@@ -1,13 +1,22 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var dotenv = require('dotenv');
+dotenv.config();
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
+var mongoose = require('mongoose');
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error'));
+db.on('open', () => console.log('Db connection is active'));
 
 var apiRouter = require('./api/routes/index');
 
 var app = express();
 
+console.log(process.env.MONGODB_URI);
 
 app.use(logger('dev'));
 app.use(express.json());
