@@ -5,7 +5,9 @@ const router = express.Router();
 /**
  * GET status
  */
-router.get('/status', (req, res) => res.send('OK'));
+router.get('/status', (req, res) => {
+  res.send('OK');
+});
 
 router.use('/playground', playgroundRoutes);
 

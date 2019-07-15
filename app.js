@@ -5,7 +5,7 @@ var dotenv = require('dotenv');
 dotenv.config();
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var cors = require('cors');
 var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 var db = mongoose.connection;
@@ -19,8 +19,13 @@ var app = express();
 console.log(process.env.MONGODB_URI);
 
 app.use(logger('dev'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+var corsOptions =  process.env.NODE_ENV === 'prod' ? { origin: 'https://dev-diaries.netlify.com' } : {};
+app.use(cors(corsOptions));
+
 app.use(cookieParser());
 
 app.use('/api', apiRouter);
@@ -38,7 +43,6 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
 });
 
 module.exports = app;
