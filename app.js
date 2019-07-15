@@ -16,8 +16,6 @@ var apiRouter = require('./api/routes/index');
 
 var app = express();
 
-console.log(process.env.MONGODB_URI);
-
 app.use(logger('dev'));
 
 app.use(express.json());
