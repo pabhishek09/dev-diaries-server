@@ -1,22 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Question = new Schema({
-  id: Schema.Types.ObjectId,
-  name: String,
-  desc: String,
-  signature: {
-    name: String,
-    params: [{
-      name: String,
-      type: String,
-      desc: String
-    }]
-  },
-  topScorer: {
-    id: String,
-    score: Number
-  }
+const QuestionSchema = new Schema({
+  id: { type: Schema.Types.ObjectId, required: true },
+  title: { type: String, required: true }
 });
+
+const Question = mongoose.model('Question', QuestionSchema);
 
 export default Question;
