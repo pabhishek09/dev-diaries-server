@@ -1,27 +1,26 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var dotenv = require('dotenv');
+import createError from 'http-errors';
+import express from 'express';
+import dotenv from 'dotenv';
 dotenv.config();
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
-var mongoose = require('mongoose');
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import cors from 'cors';
+import mongoose from'mongoose';
+import apiRouter from './routes/index';
+
 mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
 db.on('open', () => console.log('Db connection is active'));
 
-var apiRouter = require('./api/routes/index');
-
-var app = express();
+const app = express();
 
 app.use(logger('dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-var corsOptions =  process.env.NODE_ENV === 'prod' ? { origin: 'https://dev-diaries.netlify.com' } : {};
+const corsOptions =  process.env.NODE_ENV === 'prod' ? { origin: 'https://dev-diaries.netlify.com' } : {};
 app.use(cors(corsOptions));
 
 app.use(cookieParser());
@@ -43,4 +42,4 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
 });
 
-module.exports = app;
+export default app;
