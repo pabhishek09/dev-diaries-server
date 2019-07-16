@@ -1,32 +1,48 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var dotenv = require('dotenv');
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const dotenv = require("dotenv");
+require("dotenv").config({ path: `${process.cwd()}/.env` });
 dotenv.config();
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
-var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error'));
-db.on('open', () => console.log('Db connection is active'));
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const session = require("express-session");
+const randomString = require("randomstring");
 
-var apiRouter = require('./api/routes/index');
+// mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+// const db = mongoose.connection;
+// db.on("error", console.error.bind(console, "MongoDB connection error"));
+// db.on("open", () => console.log("Db connection is active"));
 
-var app = express();
+const apiRouter = require("./api/routes/index");
 
-app.use(logger('dev'));
+const app = express();
 
+app.use(logger("dev"));
+app.use(
+  session({
+    secret: randomString.generate(),
+    cookie: { maxAge: 60000 },
+    resave: false,
+    saveUninitialized: false
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static("views"));
+app.disable("etag");
 
-var corsOptions =  process.env.NODE_ENV === 'prod' ? { origin: 'https://dev-diaries.netlify.com' } : {};
+const corsOptions =
+  process.env.NODE_ENV === "prod"
+    ? { origin: "https://dev-diaries.netlify.com" }
+    : {};
 app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
-app.use('/api', apiRouter);
+app.use("/api", apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,7 +53,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
   res.status(err.status || 500);

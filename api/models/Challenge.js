@@ -1,8 +1,9 @@
-var mongoose = require('mongoose');
-var Question = require('./Challenge');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Question = require('./Challenge');
 
-var Challenge = new Schema({
+const { Schema } = mongoose;
+
+const Challenge = new Schema({
   id: Schema.Types.ObjectId,
   name: String,
   desc: String,
@@ -13,7 +14,7 @@ var Challenge = new Schema({
     }
   ],
   questionCount: Number,
-  questions: [ Question ]
+  questions: [Question]
 });
 
 export default Challenge;

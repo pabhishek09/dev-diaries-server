@@ -1,17 +1,20 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-var Question = new Schema({
+const { Schema } = mongoose;
+
+const Question = new Schema({
   id: Schema.Types.ObjectId,
   name: String,
   desc: String,
   signature: {
     name: String,
-    params: [{
-      name: String,
-      type: String,
-      desc: String
-    }]
+    params: [
+      {
+        name: String,
+        type: String,
+        desc: String
+      }
+    ]
   },
   topScorer: {
     id: String,
