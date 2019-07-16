@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
-var Question = require('./Challenge');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Question = require('./Challenge');
+const Schema = mongoose.Schema;
 
-var Challenge = new Schema({
+const Challenge = new Schema({
   id: Schema.Types.ObjectId,
   name: String,
   desc: String,
