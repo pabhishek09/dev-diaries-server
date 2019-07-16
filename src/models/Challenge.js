@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const ParamsSchema = new Schema({ 
@@ -18,10 +18,10 @@ const ScorerSchema = new Schema({
   rank: { type: String, required: true }
 });
 
-const EvaluateSchema = new Schema({
+const EvaluateSchema = [ new Schema({
   args: [ Schema.Types.Mixed ],
   return: Schema.Types.Mixed
-})
+})];
 
 const ProblemSchema = new Schema({
   id: { type: Schema.Types.ObjectId, required: true },
@@ -38,7 +38,7 @@ const ChallengeSchema = new Schema({
   name: { type: String, required: true },
   desc: { type: String, required: true },
   topScorer: [ ScorerSchema ],
-  questionCount: Number,
+  problemCount: Number,
   problems: [ ProblemSchema ]
 });
 
