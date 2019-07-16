@@ -1,7 +1,8 @@
 import express from 'express';
-const router = express.Router();
+import UserRoutes from './user.route';
 import PlaygroundRoutes from './playground.route';
 import ForumRoutes from './forum.route';
+const router = express.Router();
 
 /**
  * GET status
@@ -9,6 +10,11 @@ import ForumRoutes from './forum.route';
 router.get('/status', (req, res) => {
   res.send('OK');
 });
+
+/**
+ * User API's
+ */
+router.use('/user', UserRoutes);
 
 /**
  * Playground API's
