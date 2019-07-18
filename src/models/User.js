@@ -1,25 +1,9 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-const ProblemAttempt = new Schema({
-  id: { type: String, required: true },
-  name: { type: String, required: true },
-  score: { type: Number, required: true },
-  attempts: { type: Number, required: true },
-  solution: { type: String, required: true }
-});
-
-const ChallengeProgress = new Schema({
-  id: { type: String, required: true },
-  name: { type: String, required: true },
-  score: { type: Number, required: true },
-  problemAttempts: [ ProblemAttempt ]
-});
-
 const PlaygroundProfile = new Schema({
-    score: Number,
-    level: String,
-    attemptedChallenges: [ ChallengeProgress ]
+  score: Number,
+  level: String
 });
 
 const ForumProfile = new Schema({});

@@ -14,8 +14,7 @@ const SignatureSchema = new Schema({
 
 const ScorerSchema = new Schema({
   user: { type: String, required: true },
-  score: { type: Number, required: true },
-  rank: { type: String, required: true }
+  score: { type: Number, required: true }
 });
 
 const EvaluateSchema = [ new Schema({
@@ -24,20 +23,17 @@ const EvaluateSchema = [ new Schema({
 })];
 
 const ProblemSchema = new Schema({
-  id: { type: Schema.Types.ObjectId, required: true },
   name: { type: String, required: true },
   order: { type: Number, required: true },
   desc: { type: String, required: true },
   signature: { type: SignatureSchema, required: true },
-  topScorer: [ ScorerSchema ],
   evaluate: { type: EvaluateSchema, required: true }
 });
 
 const ChallengeSchema = new Schema({
-  id: { type: Schema.Types.ObjectId, required: true },
   name: { type: String, required: true },
   desc: { type: String, required: true },
-  topScorer: [ ScorerSchema ],
+  topScorer: ScorerSchema,
   problemCount: Number,
   problems: [ ProblemSchema ]
 });

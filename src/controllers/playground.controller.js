@@ -1,3 +1,4 @@
+import { getScore } from '../common/playground.util';
 import PlaygroundService from '../services/playground.service';
 import _get from 'lodash/get';
 
@@ -12,9 +13,18 @@ const PlaygroundController = {
     } catch (err) {
       next(err);
     }
-  }, 
-  
-  getChallengeById: async(req, res, next) => {
+  },
+  myChallenges: async (req, res, next) => {
+    console.log("Inside PlaygroundController: myChallenges");
+    try {
+      const myChallenges = await PlaygroundService.getAllChallenges();
+      console.log("Exiting PlaygroundController: myChallenges");
+      res.send(myChallenges);
+    } catch (err) {
+      next(err);
+    }
+  },
+  getChallengeById: async (req, res, next) => {
     console.log("Inside PlaygroundController: getChallengeById");
     try {
       const challengeId = _get(req, "params.id");
@@ -25,7 +35,6 @@ const PlaygroundController = {
       next(err);
     }
   }, 
-
   createChallenge: async (req, res, next) => {
     console.log("Inside PlaygroundController: createChallenge");
     try {
@@ -37,6 +46,48 @@ const PlaygroundController = {
     } catch (err) {
       next(err);
     }
+  },
+  submitSolution: async (req, res, next) => {
+    console.log("Inside PlaygroundController: submitAttempt");
+    try {
+      const solutionBody = req.body;
+      const solution = solutionBody.solution;
+      const score = getScore(solution, solutionBody.fnName, solutionBody.evaluate);
+      // Payload is created assuming this to be user's first problem solution in a challenge
+      const challengeAttempt = {
+        userId: solutionBody.userId,
+        challengeId: solutionBody.challengeId,
+        name: solutionBody.name,
+        problemCount: solutionBody.problemCount,
+        score,
+        problemAttempt: {
+          problemId: solutionBody.problemId,
+          score,
+          solution,
+          attempts: 1
+        }
+      };
+      const attemptResponse = await PlaygroundService.handleChallengeAttempt(challengeAttempt);
+      console.log("Attempt response", attemptResponse);
+      const userScore = attemptResponse.score;
+      await updateUserScore();
+      if (userScore > solutionBody.topScore) {
+        await updateChallengeTopScore();
+      }
+      console.log("Exiting PlaygroundController: submitAttempt");
+    } catch (err) {
+      next(err);
+    }
+  }, 
+  leaderboard: async(req, res, next) => {
+    console.log("Inside PlaygroundController: leaderboard");
+    try {
+      const leaderboardRes = await PlaygroundService.leaderboard();
+      console.log("Exiting PlaygroundController: leaderboard");
+      res.send(leaderboardRes);
+    } catch (err) {
+      next(err);
+    }    
   }
 };
 
