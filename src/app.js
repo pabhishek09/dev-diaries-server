@@ -7,8 +7,6 @@ import logger from 'morgan';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import apiRouter from './routes/index';
-import randomString from 'randomstring';
-import session from 'express-session';
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 const db = mongoose.connection;
@@ -18,18 +16,6 @@ db.on('open', () => console.log('Db connection is active'));
 const app = express();
 
 app.use(logger('dev'));
-app.use(express.static('views'));
-app.use(
-  session({
-    secret: randomString.generate(),
-    cookie: { maxAge: 60000 },
-    resave: false,
-    saveUninitialized: false
-  })
-);
-app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

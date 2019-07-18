@@ -1,3 +1,5 @@
+import * as Babel from '@babel/standalone/babel.min';
+
 const transpileCode = (str) => {
   let transpiledCode;
   try {
@@ -24,7 +26,6 @@ const getScore = (code, name, expectations) => {
       const output = fnInstance.apply(null, expectation.args);
       if (expectation.return === output) {
         score = score + 10;
-        console.log('Test case passed for', expectation.arg);
       }
     });
     return score;
