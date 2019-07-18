@@ -1,22 +1,22 @@
-const express = require("express");
-const randomString = require("randomstring");
-require("dotenv").config({ path: `${process.cwd()}/.env` });
+const express = require('express');
+const randomString = require('randomstring');
+require('dotenv').config({ path: `${process.cwd()}/.env` });
 const config = process.env;
 const router = express.Router();
-const authHandler = require("../controllers/authController");
-const qs = require("querystring");
-router.get("/", (req, res) => {
+const authHandler = require('../controllers/authController');
+const qs = require('querystring');
+router.get('/', (req, res) => {
   authHandler(req, res);
 });
 
-router.get("/login", (req, res) => {
+router.get('/login', (req, res) => {
   console.log(
-    "how",
+    'how',
     `https://github.com/login/oauth/authorize?${qs.stringify({
       client_id: config.client_id,
       redirect_uri: config.redirect_url,
       state: req.session.csrf_string,
-      scope: "user"
+      scope: 'user'
     })}`
   );
   // generate that csrf_string for state param
@@ -27,10 +27,10 @@ router.get("/login", (req, res) => {
       client_id: config.client_id,
       redirect_uri: config.redirect_url,
       state: req.session.csrf_string,
-      scope: "user"
+      scope: 'user'
     }
   )}`;
-  console.log("githubAuthUrl", githubAuthUrl);
+  console.log('githubAuthUrl', githubAuthUrl);
   // redirect user with express
   res.redirect(githubAuthUrl);
 });

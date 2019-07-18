@@ -8,46 +8,46 @@ import _findIndex from 'lodash/findIndex';
 const PlaygroundService = {
 
   getAllChallenges: async () => {
-    console.log("Inside PlaygroundService: getAllChallenges");
+    console.log('Inside PlaygroundService: getAllChallenges');
     let response;
     try {
       response = await Challenge.find({}, 'name desc problemCount topScorer');
-      console.log("Challenge getAllChallenges successful", response);
+      console.log('Challenge getAllChallenges successful', response);
       return response;
     } catch (err) {
-      console.log("Error in PlaygroundService: getAllChallenges", err);
+      console.log('Error in PlaygroundService: getAllChallenges', err);
       throw err;
     }
   },
 
   myChallenges: async(userId) => {
-    console.log("Inside PlaygroundService: myChallenges");
+    console.log('Inside PlaygroundService: myChallenges');
     let response;
     try {
       response = await ChallengeAttempt.find({ userId });
-      console.log("Challenge getAllChallenges successful", response);
+      console.log('Challenge getAllChallenges successful', response);
       return response;
     } catch (err) {
-      console.log("Error in PlaygroundService: myChallenges", err);
+      console.log('Error in PlaygroundService: myChallenges', err);
       throw err;
     }
   },
 
   getChallengeById: async(challengeId) => {
-    console.log("Inside PlaygroundService: getChallengeById", challengeId);
+    console.log('Inside PlaygroundService: getChallengeById', challengeId);
     let response;
     try {
       response = await Challenge.findById(challengeId);
-      console.log("Challenge getChallengeById successful", response);
+      console.log('Challenge getChallengeById successful', response);
       return response;
     } catch (err) {
-      console.log("Error in PlaygroundService: getChallengeById", err);
+      console.log('Error in PlaygroundService: getChallengeById', err);
       throw err;
     }
   },
 
   createChallenge: async (challengeBody) => {
-    console.log("Inside PlaygroundService: createChallenge", challengeBody);
+    console.log('Inside PlaygroundService: createChallenge', challengeBody);
     let response;
     try {
       challengeBody['problems'] = _map(challengeBody['problems'], (problem, index) => { 
@@ -58,30 +58,30 @@ const PlaygroundService = {
       console.log('Challenge body', challengeBody);
       const challenge = new Challenge(challengeBody);
       response = await challenge.save();
-      console.log("Challenge save successful", response);
+      console.log('Challenge save successful', response);
       return response;
     } catch (err) {
-      console.log("Error in PlaygroundService: createChallenge", err);
+      console.log('Error in PlaygroundService: createChallenge', err);
       throw err;
     }
   }, 
   
   getChallengeAttempt: async(challengeId, userId) => {
-    console.log("Inside PlaygroundService: getChallengeAttempt", challengeBody);
+    console.log('Inside PlaygroundService: getChallengeAttempt', challengeBody);
     let response;
     try {
       const challengeAttempt = await ChallengeAttempt.findOne({challengeId, userId});
-      console.log("Challenge attempt", challengeAttempt);
+      console.log('Challenge attempt', challengeAttempt);
       return challengeAttempt;
     } catch (err) {
-      console.log("Error in PlaygroundService: getChallengeAttempt", err);
+      console.log('Error in PlaygroundService: getChallengeAttempt', err);
       throw err;
     }
   }, 
   
   handleChallengeAttempt: async (challengeAttempt) => {
     // Search for past challenge attempts
-    console.log("Inside PlaygroundService: handleChallengeAttempt", challengeAttempt);
+    console.log('Inside PlaygroundService: handleChallengeAttempt', challengeAttempt);
     let response;
     try {
       const pastChallengeAttempt = await getChallengeAttempt(challengeAttempt.challengeId, challengeAttempt.userId);
@@ -111,16 +111,16 @@ const PlaygroundService = {
         pastChallengeAttempt.score = _reduce(pastChallengeAttempt.problemsAttempted, (sum, problemAttempt) => {
           return sum + problemAttempt.score;
         }, 0);
-        console.log("Update Challenge request", pastChallengeAttempt);
+        console.log('Update Challenge request', pastChallengeAttempt);
         const updateChallengeResponse = await ChallengeAttempt.findByIdAndUpdate(challengeAttemptId, pastChallengeAttempt);
-        console.log("Exiting PlaygroundService: handleChallengeAttempt, update challenge response", updateChallengeResponse);
+        console.log('Exiting PlaygroundService: handleChallengeAttempt, update challenge response', updateChallengeResponse);
         response = updateChallengeResponse.score;
       } else {
         // Create new challenge attempt
-        console.log("Create new Challenge request", challengeAttempt);
+        console.log('Create new Challenge request', challengeAttempt);
         const challengeAttempt = new ChallengeAttempt(challengeAttempt);
         const newChallengeResponse = await challengeAttempt.save();
-        console.log("Exiting PlaygroundService: handleChallengeAttempt, new challenge response", newChallengeResponse);
+        console.log('Exiting PlaygroundService: handleChallengeAttempt, new challenge response', newChallengeResponse);
         response = newChallengeResponse.score;
       }
       return response;
@@ -138,14 +138,14 @@ const PlaygroundService = {
   }, 
   
   leaderboard: async () => {
-      console.log("Inside PlaygroundService: leaderboard");
+      console.log('Inside PlaygroundService: leaderboard');
       let response;
       try {
         response = await User.find().sort({ field: 'playgroundProfile.score', test: -1 }).limit(3);
-        console.log("Get leaderboard successful", response);
+        console.log('Get leaderboard successful', response);
         return response;
       } catch (err) {
-        console.log("Error in PlaygroundService: leaderboard", err);
+        console.log('Error in PlaygroundService: leaderboard', err);
         throw err;
       }
   }
