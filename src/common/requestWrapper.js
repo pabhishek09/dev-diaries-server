@@ -1,4 +1,4 @@
-const axios = require('axios');
+const axios = require("axios");
 
 const apiWrapper = options => {
   return new Promise(async (resolve, reject) => {
@@ -9,13 +9,13 @@ const apiWrapper = options => {
         url,
         data,
         method,
-        responseType: 'json'
+        responseType: "json"
       };
       const response = await axios(requestOptions);
-      console.log('successful call');
+      console.log("successful call");
       resolve(response);
     } catch (error) {
-      console.log('API failed:', options.url);
+      console.log("API failed:", options.url);
       reject(error.response);
     }
   });

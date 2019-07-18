@@ -1,5 +1,6 @@
-import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+
+const { Schema } = mongoose;
 
 const ProblemAttempt = new Schema({
   problemId: { type: String, required: true },
@@ -14,7 +15,7 @@ const ChallengeAttempt = new Schema({
   name: { type: String, required: true },
   score: { type: Number, required: true },
   problemCount: { type: Number, required: true },
-  problemsAttempted: [ ProblemAttempt ]
+  problemsAttempted: [ProblemAttempt]
 });
 
 export default ChallengeAttempt;

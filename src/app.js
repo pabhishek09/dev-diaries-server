@@ -1,15 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
-dotenv.config();
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import logger from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
-import apiRouter from "./routes/index";
 import randomString from "randomstring";
 import session from "express-session";
 import createError from "http-errors";
+import apiRouter from "./routes/index";
+
+dotenv.config();
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 const db = mongoose.connection;
@@ -29,7 +30,7 @@ app.use(express.static("views"));
 //   })
 // );
 app.get("/", function(req, res) {
-  res.sendFile(__dirname + "/index.html");
+  res.sendFile(`${__dirname}/index.html`);
 });
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

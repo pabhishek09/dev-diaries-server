@@ -1,6 +1,7 @@
+import User from "../models/User";
+
 const { pick } = require("lodash");
 require("dotenv").config({ path: `${process.cwd()}/.env` });
-import User from "../models/User";
 
 const UserService = {
   findUser: async uid => {

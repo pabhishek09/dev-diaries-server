@@ -1,0 +1,23 @@
+{
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": ["error"],
+    "camelcase": [
+      0,
+      {
+        "properties": "never"
+      }
+    ],
+    "func-names": ["error", "never"]
+    // "import/no-extraneous-dependencies": [
+    //   "error",
+    //   {
+    //     "dependencies": false,
+    //     "devDependencies": false,
+    //     "optionalDependencies": false,
+    //     "peerDependencies": false
+    //   }
+    // ]
+  }
+}

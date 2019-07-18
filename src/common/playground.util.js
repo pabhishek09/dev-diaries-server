@@ -1,37 +1,39 @@
-const transpileCode = (str) => {
+const transpileCode = str => {
   let transpiledCode;
   try {
-    transpiledCode = Babel.transform(str, { presets: ['es2015'] }).code;
+    transpiledCode = Babel.transform(str, { presets: ["es2015"] }).code;
   } catch (err) {
-    console.log('Transpilation error', err);
+    console.log("Transpilation error", err);
   }
   return transpiledCode;
-}
+};
 
 const getFunctionFromSnippet = function(snippet) {
   // eslint-disable-next-line
   return new Function(snippet);
-}
+};
 
 const getScore = (code, name, expectations) => {
   try {
     let score = 0;
     const transpiledCode = transpileCode(code);
     const returnFnSnippet = `return ${name}`;
-    const wrapperFn = getFunctionFromSnippet(transpiledCode.concat(returnFnSnippet));
+    const wrapperFn = getFunctionFromSnippet(
+      transpiledCode.concat(returnFnSnippet)
+    );
     const fnInstance = wrapperFn();
-    expectations.forEach((expectation) => {
+    expectations.forEach(expectation => {
       const output = fnInstance.apply(null, expectation.args);
       if (expectation.return === output) {
-        score = score + 10;
-        console.log('Test case passed for', expectation.arg);
+        score += 10;
+        console.log("Test case passed for", expectation.arg);
       }
     });
     return score;
   } catch (err) {
-    console.log('Error in PlaygroundUtil: getScore', err);
+    console.log("Error in PlaygroundUtil: getScore", err);
     throw err;
   }
-}
+};
 
 export { getScore };

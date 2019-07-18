@@ -1,7 +1,7 @@
-require('dotenv').config({ path: `${process.cwd()}/.env` });
-const errorResponses = require('../common/errorResponses');
-const { tfidf } = require('recommender');
-const mongoose = require('mongoose');
+require("dotenv").config({ path: `${process.cwd()}/.env` });
+const { tfidf } = require("recommender");
+const mongoose = require("mongoose");
+const errorResponses = require("../common/errorResponses");
 
 // get the list of questions from mongo
 const fetchQuestions = () => {};

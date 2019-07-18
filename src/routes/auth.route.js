@@ -1,10 +1,13 @@
+import authHandler from "../controllers/authController";
+
 const express = require("express");
 const randomString = require("randomstring");
 require("dotenv").config({ path: `${process.cwd()}/.env` });
+
 const config = process.env;
 const router = express.Router();
-import authHandler from "../controllers/authController";
 const qs = require("querystring");
+
 router.get("/", authHandler);
 
 router.get("/login", (req, res) => {

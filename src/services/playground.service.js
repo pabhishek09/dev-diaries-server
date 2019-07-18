@@ -1,9 +1,9 @@
-import Challenge from "../models/Challenge";
-import ChallengeAttempt from "../models/ChallengeAttempt";
-import User from "../models/User";
 import _map from "lodash/map";
 import _reduce from "lodash/map";
 import _findIndex from "lodash/findIndex";
+import Challenge from "../models/Challenge";
+import ChallengeAttempt from "../models/ChallengeAttempt";
+import User from "../models/User";
 
 const PlaygroundService = {
   getAllChallenges: async () => {
@@ -49,14 +49,14 @@ const PlaygroundService = {
     console.log("Inside PlaygroundService: createChallenge", challengeBody);
     let response;
     try {
-      challengeBody["problems"] = _map(
-        challengeBody["problems"],
+      challengeBody.problems = _map(
+        challengeBody.problems,
         (problem, index) => {
-          problem["order"] = ++index;
+          problem.order = ++index;
           return problem;
         }
       );
-      challengeBody["problemCount"] = challengeBody["problems"].length;
+      challengeBody.problemCount = challengeBody.problems.length;
       console.log("Challenge body", challengeBody);
       const challenge = new Challenge(challengeBody);
       response = await challenge.save();
@@ -103,7 +103,7 @@ const PlaygroundService = {
           pastChallengeAttempt
         );
         const challengeAttemptId = pastChallengeAttempt._id;
-        let indexOfProblemAttempt = _findIndex(
+        const indexOfProblemAttempt = _findIndex(
           pastChallengeAttempt.problemsAttempted,
           problemAttempt => problemAttempt.problemId === problemId
         );

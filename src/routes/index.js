@@ -2,8 +2,10 @@ import express from "express";
 import UserRoutes from "./user.route";
 import PlaygroundRoutes from "./playground.route";
 import ForumRoutes from "./forum.route";
+
 const authRoute = require("./auth.route");
 const searchRoute = require("./search.route");
+
 const router = express.Router();
 /** Authentication routes * */
 router.use("/user/authenticate", authRoute);
@@ -30,7 +32,7 @@ router.use("/playground", PlaygroundRoutes);
  */
 router.use("/forum", ForumRoutes);
 
-/** search Route **/
+/** search Route * */
 router.use("/search", searchRoute);
 
 export default router;
