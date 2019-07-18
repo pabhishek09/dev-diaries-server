@@ -14,6 +14,7 @@ const PlaygroundController = {
       next(err);
     }
   },
+
   myChallenges: async (req, res, next) => {
     console.log('Inside PlaygroundController: myChallenges');
     try {
@@ -24,6 +25,7 @@ const PlaygroundController = {
       next(err);
     }
   },
+
   getChallengeById: async (req, res, next) => {
     console.log('Inside PlaygroundController: getChallengeById');
     try {
@@ -35,6 +37,7 @@ const PlaygroundController = {
       next(err);
     }
   }, 
+
   createChallenge: async (req, res, next) => {
     console.log('Inside PlaygroundController: createChallenge');
     try {
@@ -47,6 +50,7 @@ const PlaygroundController = {
       next(err);
     }
   },
+
   submitSolution: async (req, res, next) => {
     console.log('Inside PlaygroundController: submitAttempt');
     try {
@@ -79,6 +83,7 @@ const PlaygroundController = {
       next(err);
     }
   }, 
+
   leaderboard: async(req, res, next) => {
     console.log('Inside PlaygroundController: leaderboard');
     try {
