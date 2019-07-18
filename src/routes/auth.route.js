@@ -1,7 +1,6 @@
+import express from "express";
 import authHandler from "../controllers/authController";
 
-const express = require("express");
-const randomString = require("randomstring");
 require("dotenv").config({ path: `${process.cwd()}/.env` });
 
 const config = process.env;

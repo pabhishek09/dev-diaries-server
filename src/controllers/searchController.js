@@ -1,29 +1,33 @@
-require("dotenv").config({ path: `${process.cwd()}/.env` });
-const { tfidf } = require("recommender");
-const mongoose = require("mongoose");
-const errorResponses = require("../common/errorResponses");
+/* eslint-disable consistent-return */
+import { tfidf } from "recommender";
+import QuestionsService from "../services/questions.service";
 
 // get the list of questions from mongo
-const fetchQuestions = () => {};
-const returnClosestMatches = (req, res) => {
-  const documents = fetchQuestions;
-  const titlesOnly = documents.map(data => {
-    return data.title;
-  });
-  const { searchQuery } = req ? req.query : null;
-  tfidf(searchQuery, titlesOnly, sortedDocs => {
-    console.log(sortedDocs);
-    sortedDocs = sortedDocs.slice(0, 5);
-    searchResponse = documents.map(doc => {
-      if (sortedDocs.includes(doc.title)) {
-        return doc;
-      }
-    });
-    res.json({
-      suggested: searchResponse
-    });
-  });
+const SearchController = {
+  returnClosestMatches: async (req, res, next) => {
+    try {
+      const documents = await QuestionsService.getAllQuestions();
+      const titlesOnly = documents.map(data => {
+        return data.title;
+      });
+      const { searchQuery } = req ? req.query : null;
+      tfidf(searchQuery, titlesOnly, sortedDocs => {
+        console.log(sortedDocs);
+        const sortedDocList = sortedDocs.slice(0, 5);
+        // eslint-disable-next-line array-callback-return
+        const searchResponse = documents.map(doc => {
+          if (sortedDocList.includes(doc.title)) {
+            return doc;
+          }
+        });
+        res.json({
+          suggested: searchResponse
+        });
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 };
 // config to define app settings
-const config = process.env;
-module.exports = returnClosestMatches;
+export default SearchController;

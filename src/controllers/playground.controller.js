@@ -81,7 +81,6 @@ const PlaygroundController = {
       );
       console.log("Attempt response", attemptResponse);
       const userScore = attemptResponse.score;
-      await updateUserScore();
       if (userScore > solutionBody.topScore) {
         await updateChallengeTopScore();
       }

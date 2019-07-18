@@ -18,6 +18,20 @@ const UserController = {
       console.log("somethings up with the findUser");
       next(err);
     }
+  },
+  updateUserScore: async (req, res, next) => {
+    try {
+      const uid = _get(req, "params.id", req.body);
+      const userData = await UserService.updateUserScore(uid, req.body);
+      console.log("Exiting userController: updateUserScore", userData);
+      if (!userData) {
+        res.status(404).json(errorResponses.NotFound);
+      }
+      res.send({ user: userData });
+    } catch (err) {
+      console.log("somethings up with the findUser");
+      next(err);
+    }
   }
 };
 

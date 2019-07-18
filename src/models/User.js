@@ -19,8 +19,8 @@ const UserSchema = new Schema({
   html_url: { type: String, required: true },
   gists_url: { type: String, required: true },
   email: { type: String, required: true },
-  playgroundProfile: PlaygroundProfile
-  // forumProfile: ForumProfile
+  playgroundProfile: PlaygroundProfile,
+  forumProfile: PlaygroundProfile
 });
 const User = mongoose.model("User", UserSchema);
 

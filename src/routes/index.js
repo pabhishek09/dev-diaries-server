@@ -1,7 +1,7 @@
 import express from "express";
 import UserRoutes from "./user.route";
 import PlaygroundRoutes from "./playground.route";
-import ForumRoutes from "./forum.route";
+import ForumRoutes from "./questions.route";
 
 const authRoute = require("./auth.route");
 const searchRoute = require("./search.route");

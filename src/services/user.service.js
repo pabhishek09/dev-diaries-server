@@ -43,6 +43,40 @@ const UserService = {
       console.log("Error in createUser", err, userData);
       throw err;
     }
+  },
+  updateUserScore: async (id, scoreData) => {
+    console.log("Inside UserSearvice: updateUserScore", scoreData);
+    let response;
+    try {
+      console.log("Question body", scoreData);
+      if (scoreData.type && scoreData.type.toLowerCase() === "forum") {
+        response = await User.update(
+          { id },
+          { $inc: { "forumProfile.score": scoreData.score } },
+          {
+            new: true
+          }
+        );
+      } else if (
+        scoreData.type &&
+        scoreData.type.toLowerCase() === "playground"
+      ) {
+        response = await User.update(
+          { id },
+          { $inc: { "playgroundProfile.score": scoreData.score } },
+          {
+            new: true
+          }
+        );
+      } else {
+        return false;
+      }
+      console.log("UserScore saved successful", scoreData);
+      return response;
+    } catch (err) {
+      console.log("Error in UserService: UpdateUSerScore", err);
+      throw err;
+    }
   }
 };
 export default UserService;
