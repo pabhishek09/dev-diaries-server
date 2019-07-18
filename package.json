@@ -11,7 +11,8 @@
     "clean": "rimraf dist",
     "test": "jest dotenv/config",
     "watch": "nodemon --config ./nodemon.json --",
-    "fix-lint": "eslint src --fix"
+    "fix-lint": "eslint src --fix",
+    "pretty": "prettier --write \"src/**/*.js\""
   },
   "dependencies": {
     "@babel/standalone": "^7.5.4",
