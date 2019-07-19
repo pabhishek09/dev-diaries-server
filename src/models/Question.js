@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 const Tag = new Schema({
@@ -18,6 +18,6 @@ const QuestionSchema = new Schema({
   tags: [Tag]
 });
 
-const Question = mongoose.model("Question", QuestionSchema);
+const Question = mongoose.model('Question', QuestionSchema);
 
 export default Question;

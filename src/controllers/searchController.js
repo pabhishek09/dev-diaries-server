@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
-import { tfidf } from "recommender";
-import QuestionsService from "../services/questions.service";
+import { tfidf } from 'recommender';
+import QuestionsService from '../services/questions.service';
 
 // get the list of questions from mongo
 const SearchController = {

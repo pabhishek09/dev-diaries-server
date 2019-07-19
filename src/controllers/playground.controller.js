@@ -1,36 +1,27 @@
-import _get from "lodash/get";
-import { getScore } from "../common/playground.util";
-import PlaygroundService from "../services/playground.service";
+import _get from 'lodash/get';
+import { getScore } from '../common/playground.util';
+import PlaygroundService from '../services/playground.service';
 
 const PlaygroundController = {
   getAllChallenges: async (req, res, next) => {
-    console.log("Inside PlaygroundController: getAllChallenges");
+    console.log('Inside PlaygroundController: getAllChallenges');
     try {
-      const challenges = await PlaygroundService.getAllChallenges();
-      console.log("Exiting PlaygroundController: getAllChallenges");
+      const challenges = await PlaygroundService.getAllChallenges(
+        'name desc problemCount topScorer'
+      );
+      console.log('Exiting PlaygroundController: getAllChallenges');
       res.send(challenges);
     } catch (err) {
       next(err);
     }
   },
 
-  myChallenges: async (req, res, next) => {
-    console.log("Inside PlaygroundController: myChallenges");
-    try {
-      const myChallenges = await PlaygroundService.getAllChallenges();
-      console.log("Exiting PlaygroundController: myChallenges");
-      res.send(myChallenges);
-    } catch (err) {
-      next(err);
-    }
-  },
-
   getChallengeById: async (req, res, next) => {
-    console.log("Inside PlaygroundController: getChallengeById");
+    console.log('Inside PlaygroundController: getChallengeById');
     try {
-      const challengeId = _get(req, "params.id");
+      const challengeId = _get(req, 'params.id');
       const challenge = await PlaygroundService.getChallengeById(challengeId);
-      console.log("Exiting PlaygroundController: getChallengeById");
+      console.log('Exiting PlaygroundController: getChallengeById');
       res.send(challenge);
     } catch (err) {
       next(err);
@@ -38,14 +29,37 @@ const PlaygroundController = {
   },
 
   createChallenge: async (req, res, next) => {
-    console.log("Inside PlaygroundController: createChallenge");
+    console.log('Inside PlaygroundController: createChallenge');
     try {
       const challengeBody = req.body;
-      console.log("Challenge body", challengeBody);
-      const createChallengeRes = await PlaygroundService.createChallenge(
-        challengeBody
-      );
-      console.log("Exiting PlaygroundController: createChallenge");
+      console.log('Challenge body', challengeBody);
+      const createChallengeRes = await PlaygroundService.createChallenge(challengeBody);
+      console.log('Exiting PlaygroundController: createChallenge');
+      res.send(createChallengeRes);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  getUserChallenges: async (req, res, next) => {
+    console.log('Inside PlaygroundController: getUserAttempts');
+    try {
+      const userId = _get(req, 'params.user');
+      const userAttempts = await PlaygroundService.getUserAttempts(userId, '-problemsAttempted');
+      console.log('Exiting PlaygroundController: getUserAttempts');
+      res.send(createChallengeRes);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  getChallengeAttempt: async (req, res, next) => {
+    console.log('Inside PlaygroundController: getChallengeAttempt');
+    try {
+      const userId = _get(req, 'params.user');
+      const challengeId = _get(req, 'params.id');
+      const challengeAttempts = await PlaygroundService.getChallengeAttempt(userId, challengeId);
+      console.log('Exiting PlaygroundController: getChallengeAttempt');
       res.send(createChallengeRes);
     } catch (err) {
       next(err);
@@ -53,18 +67,16 @@ const PlaygroundController = {
   },
 
   submitSolution: async (req, res, next) => {
-    console.log("Inside PlaygroundController: submitAttempt");
+    console.log('Inside PlaygroundController: submitAttempt');
     try {
       const solutionBody = req.body;
+      console.log(solutionBody);
       const { solution } = solutionBody;
-      const score = getScore(
-        solution,
-        solutionBody.fnName,
-        solutionBody.evaluate
-      );
+      const { userId } = solutionBody;
+      const score = getScore(solution, solutionBody.fnName, solutionBody.evaluate);
       // Payload is created assuming this to be user's first problem solution in a challenge
       const challengeAttempt = {
-        userId: solutionBody.userId,
+        userId,
         challengeId: solutionBody.challengeId,
         name: solutionBody.name,
         problemCount: solutionBody.problemCount,
@@ -76,25 +88,38 @@ const PlaygroundController = {
           attempts: 1
         }
       };
-      const attemptResponse = await PlaygroundService.handleChallengeAttempt(
-        challengeAttempt
+      console.log('Challenge attempt body', challengeAttempt);
+      const pastChallengeAttempt = await PlaygroundService.getChallengeAttempt(
+        challengeAttempt.challengeId,
+        userId
       );
-      console.log("Attempt response", attemptResponse);
+      const attemptResponse = await PlaygroundService.handleChallengeAttempt(
+        challengeAttempt,
+        pastChallengeAttempt
+      );
+      console.log('Attempt response', attemptResponse);
+      const userAttempts = await PlaygroundService.getUserAttempts(userId, '-problemsAttempted');
+      await PlaygroundService.updateUserScore(userId, userAttempts);
       const userScore = attemptResponse.score;
       if (userScore > solutionBody.topScore) {
-        await updateChallengeTopScore();
+        await PlaygroundService.updateChallengeTopScore(
+          solutionBody.challengeId,
+          userId,
+          userScore
+        );
       }
-      console.log("Exiting PlaygroundController: submitAttempt");
+      console.log('Exiting PlaygroundController: submitAttempt');
+      res.send(attemptResponse);
     } catch (err) {
       next(err);
     }
   },
 
   leaderboard: async (req, res, next) => {
-    console.log("Inside PlaygroundController: leaderboard");
+    console.log('Inside PlaygroundController: leaderboard');
     try {
       const leaderboardRes = await PlaygroundService.leaderboard();
-      console.log("Exiting PlaygroundController: leaderboard");
+      console.log('Exiting PlaygroundController: leaderboard');
       res.send(leaderboardRes);
     } catch (err) {
       next(err);

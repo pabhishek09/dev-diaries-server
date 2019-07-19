@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -22,6 +22,6 @@ const UserSchema = new Schema({
   playgroundProfile: PlaygroundProfile,
   forumProfile: PlaygroundProfile
 });
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model('User', UserSchema);
 
 export default User;

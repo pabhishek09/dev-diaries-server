@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -41,6 +41,6 @@ const ChallengeSchema = new Schema({
   problems: [ProblemSchema]
 });
 
-const Challenge = mongoose.model("Challenge", ChallengeSchema);
+const Challenge = mongoose.model('Challenge', ChallengeSchema);
 
 export default Challenge;
