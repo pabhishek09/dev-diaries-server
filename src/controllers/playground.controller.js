@@ -3,6 +3,7 @@ import { getScore } from '../common/playground.util';
 import PlaygroundService from '../services/playground.service';
 
 const PlaygroundController = {
+
   getTestCases: async (req, res, next) => {
     console.log('Inside PlaygroundController: getTestCases');
     try {
@@ -84,7 +85,8 @@ const PlaygroundController = {
       console.log(solutionBody);
       const { solution } = solutionBody;
       const { userId } = solutionBody;
-      const score = getScore(solution, solutionBody.fnName, solutionBody.evaluate);
+      const evaluate = await PlaygroundService.getTestCases(solutionBody.challengeId, solutionBody.problemId);
+      const score = getScore(solution, solutionBody.fnName, evaluate);
       // Payload is created assuming this to be user's first problem solution in a challenge
       const challengeAttempt = {
         userId,
