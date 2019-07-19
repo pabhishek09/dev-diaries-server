@@ -10,31 +10,25 @@ import ChallengeAttempt from '../models/ChallengeAttempt';
 import Challenge from '../models/Challenge';
 import { removeTestData } from '../common/playground.util';
 
+const Mongoose = require('mongoose');
+
+const { ObjectId } = Mongoose.Types;
 const PlaygroundService = {
   getTestCases: async (challengeId, problemId) => {
     console.log('Inside PlaygroundService: getTestCases', challengeId, problemId);
     try {
-      const response = await Challenge.findById(challengeId);
+      // const response = await Challenge.find(
+      //   { _id: ObjectId(challengeId) },
+      //   { problems: { $elemMatch: { _id: ObjectId(problemId) } } }
+      // );
+      const response = await Challenge.findOne({ _id: ObjectId(challengeId) });
+      const { problems } = response;
+      console.log(problems);
+      const { evaluate } = _find(problems, o => {
+        return o._id == problemId;
+      });
       console.log('Challenge getTestCases successful', response);
-      const { problems } = response || {};
-      console.log('problems', problems);
-      if (problems && problems.length) {
-        const res =
-          _find(problems, function(o) {
-            console.log('obj', o._id, problemId);
-            return o._id == problemId;
-          }).evaluate || {};
-        return {
-          tests: res
-        };
-        // return {
-        //   tests: _find(response.problems, function(o) {
-        //     console.log('ob', o);
-        //     return o._id === problemId;
-        //   })
-        // };
-      }
-      return [];
+      return evaluate;
     } catch (err) {
       console.log('Error in PlaygroundService: getAllChallenges', err);
       throw err;
@@ -43,9 +37,10 @@ const PlaygroundService = {
   getAllChallenges: async projection => {
     console.log('Inside PlaygroundService: getAllChallenges');
     try {
-      let response = await Challenge.find().select(projection);
+      const response = await Challenge.find()
+        .select(projection)
+        .select(['-problems.evaluate']);
       console.log('Challenge getAllChallenges successful', response);
-      response = removeTestData(response);
       return response;
     } catch (err) {
       console.log('Error in PlaygroundService: getAllChallenges', err);
@@ -56,8 +51,7 @@ const PlaygroundService = {
   getChallengeById: async challengeId => {
     console.log('Inside PlaygroundService: getChallengeById', challengeId);
     try {
-      let response = await Challenge.findById(challengeId);
-      response = removeTestData([response]);
+      const response = await Challenge.findById(challengeId).select(['-problems.evaluate']);
       console.log('Challenge getChallengeById successful', response);
       return response;
     } catch (err) {
