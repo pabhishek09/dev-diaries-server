@@ -14,7 +14,7 @@ router.use('/user/authenticate', authRoute);
  * GET status
  */
 router.get('/status', (req, res) => {
-  res.send('OK');
+  res.send('OKKKK');
 });
 
 /**
