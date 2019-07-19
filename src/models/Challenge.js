@@ -14,7 +14,7 @@ const SignatureSchema = new Schema({
 });
 
 const ScorerSchema = new Schema({
-  user: { type: String, required: true },
+  userId: { type: String, required: true },
   score: { type: Number, required: true }
 });
 

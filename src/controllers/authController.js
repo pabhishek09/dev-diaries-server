@@ -1,4 +1,3 @@
-require('dotenv').config({ path: `${process.cwd()}/.env` });
 const qs = require('querystring');
 const requestWrapper = require('../common/requestWrapper');
 const errorResponses = require('../common/errorResponses');

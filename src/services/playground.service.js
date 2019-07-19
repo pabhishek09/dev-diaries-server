@@ -69,7 +69,10 @@ const PlaygroundService = {
   getChallengeAttempt: async (challengeId, userId) => {
     console.log('Inside PlaygroundService: getChallengeAttempt');
     try {
-      const challengeAttempt = await ChallengeAttempt.findOne({ challengeId, userId });
+      const challengeAttempt = await ChallengeAttempt.findOne({
+        challengeId,
+        userId
+      });
       console.log('Challenge attempt', challengeAttempt);
       return challengeAttempt;
     } catch (err) {
