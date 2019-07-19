@@ -3,6 +3,19 @@ import { getScore } from '../common/playground.util';
 import PlaygroundService from '../services/playground.service';
 
 const PlaygroundController = {
+  getTestCases: async (req, res, next) => {
+    console.log('Inside PlaygroundController: getTestCases');
+    try {
+      const challengeId = _get(req, 'params.id');
+      const problemId = _get(req, 'params.problemId');
+      const tests = await PlaygroundService.getTestCases(challengeId, problemId);
+      console.log('Exiting PlaygroundController: getTestCases');
+      res.send(tests);
+    } catch (err) {
+      next(err);
+    }
+  },
+
   getAllChallenges: async (req, res, next) => {
     console.log('Inside PlaygroundController: getAllChallenges');
     try {

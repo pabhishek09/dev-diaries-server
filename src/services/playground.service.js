@@ -7,13 +7,34 @@ import _get from 'lodash/get';
 import User from '../models/User';
 import ChallengeAttempt from '../models/ChallengeAttempt';
 import Challenge from '../models/Challenge';
+import { removeTestData } from '../common/playground.util';
 
 const PlaygroundService = {
+  getTestCases: async (challengeId, problemId) => {
+    console.log('Inside PlaygroundService: getTestCases');
+    try {
+      let response = await Challenge.findById(challengeId);
+      console.log('Challenge getAllChallenges successful', response);
+
+      if (response && response.problems && response.problems.length) {
+        response = response.problems.find(test => {
+          // eslint-disable-next-line no-underscore-dangle
+          return test._id === problemId;
+        });
+        return { tests: response.evaluate };
+      }
+      return [];
+    } catch (err) {
+      console.log('Error in PlaygroundService: getAllChallenges', err);
+      throw err;
+    }
+  },
   getAllChallenges: async projection => {
     console.log('Inside PlaygroundService: getAllChallenges');
     try {
-      const response = await Challenge.find().select(projection);
+      let response = await Challenge.find().select(projection);
       console.log('Challenge getAllChallenges successful', response);
+      response = removeTestData(response);
       return response;
     } catch (err) {
       console.log('Error in PlaygroundService: getAllChallenges', err);
@@ -24,7 +45,8 @@ const PlaygroundService = {
   getChallengeById: async challengeId => {
     console.log('Inside PlaygroundService: getChallengeById', challengeId);
     try {
-      const response = await Challenge.findById(challengeId);
+      let response = await Challenge.findById(challengeId);
+      response = removeTestData(response);
       console.log('Challenge getChallengeById successful', response);
       return response;
     } catch (err) {
