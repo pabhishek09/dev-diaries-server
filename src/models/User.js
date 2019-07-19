@@ -18,7 +18,7 @@ const UserSchema = new Schema({
   url: { type: String, required: true },
   html_url: { type: String, required: true },
   gists_url: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String },
   playgroundProfile: PlaygroundProfile,
   forumProfile: PlaygroundProfile
 });

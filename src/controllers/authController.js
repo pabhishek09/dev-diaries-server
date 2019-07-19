@@ -1,10 +1,12 @@
+import userService from '../services/user.service';
+
 const qs = require('querystring');
 const requestWrapper = require('../common/requestWrapper');
 const errorResponses = require('../common/errorResponses');
-const userService = require('../services/user.service');
 // config to define app settings
 const config = process.env;
 const authHandler = async (req, res, next) => {
+  console.log('entred auth handler', req.query);
   try {
     const { code } = req ? req.query : null;
     const { client_id, client_secret, redirect_uri, token_url } = config;
@@ -37,12 +39,13 @@ const authHandler = async (req, res, next) => {
           }
         };
         const userResponse = await requestWrapper(options_user);
-        const { createUser, findUser } = userService.default;
+        const { createUser, findUser } = userService;
         const userDataFromDB = await findUser(userResponse.data.id);
         const isUserinDB = userDataFromDB.length > 0;
         if (!isUserinDB) {
-          const createUserRes = await createUser(userResponse.data);
           res.json({ user: userResponse.data });
+
+          const createUserRes = await createUser(userResponse.data);
 
           console.log('user successfully created', createUserRes);
         } else {
@@ -54,7 +57,7 @@ const authHandler = async (req, res, next) => {
     }
     // make a request for auth_token using above options
   } catch (error) {
-    // console.log('Internal Error', error);
+    console.log('Internal Error in auth controller', error);
     next(error);
     res.status(403).json(errorResponses.Unauthenticated);
   }

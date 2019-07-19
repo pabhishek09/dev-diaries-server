@@ -15,7 +15,7 @@ const UserController = {
         res.status(404).json(errorResponses.NotFound);
       }
     } catch (err) {
-      console.log('somethings up with the findUser');
+      console.log('somethings up with the findUser', err);
       next(err);
     }
   },
@@ -29,7 +29,7 @@ const UserController = {
       }
       res.send({ user: userData });
     } catch (err) {
-      console.log('somethings up with the findUser');
+      console.log('somethings up with the updateUserScore');
       next(err);
     }
   }
