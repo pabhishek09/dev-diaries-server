@@ -1,6 +1,9 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable prefer-spread */
 import * as Babel from '@babel/standalone/babel.min';
+
+const { pick } = require('lodash');
 
 const transpileCode = str => {
   let transpiledCode;
@@ -36,5 +39,15 @@ const getScore = (code, name, expectations) => {
     throw err;
   }
 };
-
-export { getScore };
+const removeTestData = function(data) {
+  console.log('Inside remove test data', data);
+  const result = data.map(challenge => {
+    challenge.problems = challenge.problems.map(problem => {
+      problem = pick(problem, ['name', 'order', 'desc', 'signature']);
+      return problem;
+    });
+    return challenge;
+  });
+  return result;
+};
+export { getScore, removeTestData };
