@@ -11,41 +11,29 @@ import Challenge from '../models/Challenge';
 import { removeTestData } from '../common/playground.util';
 
 const PlaygroundService = {
+
   getTestCases: async (challengeId, problemId) => {
     console.log('Inside PlaygroundService: getTestCases', challengeId, problemId);
     try {
       const response = await Challenge.findById(challengeId);
-      console.log('Challenge getTestCases successful', response);
-      const { problems } = response || {};
-      console.log('problems', problems);
-      if (problems && problems.length) {
-        const res =
-          _find(problems, function(o) {
-            console.log('obj', o._id, problemId);
-            return o._id == problemId;
-          }).evaluate || {};
-        return {
-          tests: res
-        };
-        // return {
-        //   tests: _find(response.problems, function(o) {
-        //     console.log('ob', o);
-        //     return o._id === problemId;
-        //   })
-        // };
-      }
-      return [];
+      const problems = response.problems;
+      const problem = _find(problems, function(problem) {
+        return problem._id == problemId;
+      });
+      const evaluate = _get(problem, 'evaluate');
+      return evaluate;
     } catch (err) {
       console.log('Error in PlaygroundService: getAllChallenges', err);
       throw err;
     }
   },
+
   getAllChallenges: async projection => {
     console.log('Inside PlaygroundService: getAllChallenges');
     try {
       let response = await Challenge.find().select(projection);
       console.log('Challenge getAllChallenges successful', response);
-      response = removeTestData(response);
+      // response = removeTestData(response);
       return response;
     } catch (err) {
       console.log('Error in PlaygroundService: getAllChallenges', err);
@@ -57,7 +45,7 @@ const PlaygroundService = {
     console.log('Inside PlaygroundService: getChallengeById', challengeId);
     try {
       let response = await Challenge.findById(challengeId);
-      response = removeTestData([response]);
+      // response = removeTestData([response]);
       console.log('Challenge getChallengeById successful', response);
       return response;
     } catch (err) {
