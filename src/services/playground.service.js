@@ -1,3 +1,5 @@
+/* eslint-disable import/no-duplicates */
+/* eslint-disable no-param-reassign */
 import _map from 'lodash/map';
 import _reduce from 'lodash/map';
 import _findIndex from 'lodash/findIndex';
@@ -35,6 +37,7 @@ const PlaygroundService = {
     console.log('Inside PlaygroundService: createChallenge', challengeBody);
     try {
       challengeBody.problems = _map(challengeBody.problems, (problem, index) => {
+        // eslint-disable-next-line no-plusplus
         problem.order = ++index;
         return problem;
       });
@@ -82,6 +85,7 @@ const PlaygroundService = {
     try {
       if (pastChallengeAttempt) {
         console.log('User has attempted challenge previously', pastChallengeAttempt);
+        // eslint-disable-next-line no-underscore-dangle
         const challengeAttemptId = pastChallengeAttempt._id;
         const problemId = _get(challengeAttempt, 'problemAttempt.problemId');
         const indexOfProblemAttempt = _findIndex(
@@ -96,6 +100,7 @@ const PlaygroundService = {
           if (pastProblemAttempt.attempts > 2) {
             throw new Error('Maximum attempts attempted');
           }
+          // eslint-disable-next-line no-plusplus
           pastProblemAttempt.attempts++;
           pastProblemAttempt.score = challengeAttempt.problemAttempt.score;
           pastProblemAttempt.solution = challengeAttempt.problemAttempt.solution;
@@ -147,7 +152,7 @@ const PlaygroundService = {
     try {
       const userScore = _reduce(
         userAttempts,
-        (sum, attempt) => {
+        sum => {
           return sum + userAttempts.score;
         },
         0

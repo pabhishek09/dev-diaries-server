@@ -47,7 +47,7 @@ const PlaygroundController = {
       const userId = _get(req, 'params.user');
       const userAttempts = await PlaygroundService.getUserAttempts(userId, '-problemsAttempted');
       console.log('Exiting PlaygroundController: getUserAttempts');
-      res.send(createChallengeRes);
+      res.send(userAttempts);
     } catch (err) {
       next(err);
     }
@@ -60,7 +60,7 @@ const PlaygroundController = {
       const challengeId = _get(req, 'params.id');
       const challengeAttempts = await PlaygroundService.getChallengeAttempt(userId, challengeId);
       console.log('Exiting PlaygroundController: getChallengeAttempt');
-      res.send(createChallengeRes);
+      res.send(challengeAttempts);
     } catch (err) {
       next(err);
     }

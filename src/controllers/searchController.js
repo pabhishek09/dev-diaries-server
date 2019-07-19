@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import { tfidf } from 'recommender';
+import recommender from 'recommender';
 import QuestionsService from '../services/questions.service';
 
 // get the list of questions from mongo
@@ -11,7 +11,7 @@ const SearchController = {
         return data.title;
       });
       const { searchQuery } = req ? req.query : null;
-      tfidf(searchQuery, titlesOnly, sortedDocs => {
+      recommender.tfidf(searchQuery, titlesOnly, sortedDocs => {
         console.log(sortedDocs);
         const sortedDocList = sortedDocs.slice(0, 5);
         // eslint-disable-next-line array-callback-return

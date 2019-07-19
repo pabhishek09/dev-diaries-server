@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable prefer-spread */
 import * as Babel from '@babel/standalone/babel.min';
 
 const transpileCode = str => {
