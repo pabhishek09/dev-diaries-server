@@ -2,8 +2,7 @@ import express from 'express';
 import QuestionsController from '../controllers/questions.controller';
 
 const router = express.Router();
-
-router.get('/all-questions', QuestionsController.getAllquestions);
+router.get('/all-questions', QuestionsController.getAllQuestions);
 
 router.get('/my-questions/:userId', QuestionsController.myQuestions);
 
