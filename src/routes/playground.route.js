@@ -9,7 +9,7 @@ router.get('/challenge/:id', PlaygroundController.getChallengeById);
 
 router.post('/challenge', PlaygroundController.createChallenge);
 
-router.post('/my-challenges/:user', PlaygroundController.getUserChallenges);
+router.get('/my-challenges/:user', PlaygroundController.getUserChallenges);
 
 router.post('/challenge-attempt/:user/:id', PlaygroundController.getChallengeAttempt);
 
