@@ -1,6 +1,7 @@
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-param-reassign */
 import _map from 'lodash/map';
+import _find from 'lodash/find';
 import _reduce from 'lodash/map';
 import _findIndex from 'lodash/findIndex';
 import _get from 'lodash/get';
@@ -11,17 +12,27 @@ import { removeTestData } from '../common/playground.util';
 
 const PlaygroundService = {
   getTestCases: async (challengeId, problemId) => {
-    console.log('Inside PlaygroundService: getTestCases');
+    console.log('Inside PlaygroundService: getTestCases', challengeId, problemId);
     try {
-      let response = await Challenge.findById(challengeId);
-      console.log('Challenge getAllChallenges successful', response);
-
-      if (response && response.problems && response.problems.length) {
-        response = response.problems.find(test => {
-          // eslint-disable-next-line no-underscore-dangle
-          return test._id === problemId;
-        });
-        return { tests: response.evaluate };
+      const response = await Challenge.findById(challengeId);
+      console.log('Challenge getTestCases successful', response);
+      const { problems } = response || {};
+      console.log('problems', problems);
+      if (problems && problems.length) {
+        const res =
+          _find(problems, function(o) {
+            console.log('obj', o._id, problemId);
+            return o._id == problemId;
+          }).evaluate || {};
+        return {
+          tests: res
+        };
+        // return {
+        //   tests: _find(response.problems, function(o) {
+        //     console.log('ob', o);
+        //     return o._id === problemId;
+        //   })
+        // };
       }
       return [];
     } catch (err) {
@@ -46,7 +57,7 @@ const PlaygroundService = {
     console.log('Inside PlaygroundService: getChallengeById', challengeId);
     try {
       let response = await Challenge.findById(challengeId);
-      response = removeTestData(response);
+      response = removeTestData([response]);
       console.log('Challenge getChallengeById successful', response);
       return response;
     } catch (err) {

@@ -40,6 +40,7 @@ const getScore = (code, name, expectations) => {
   }
 };
 const removeTestData = function(data) {
+  console.log('Inside remove test data', data);
   const result = data.map(challenge => {
     challenge.problems = challenge.problems.map(problem => {
       problem = pick(problem, ['name', 'order', 'desc', 'signature']);
