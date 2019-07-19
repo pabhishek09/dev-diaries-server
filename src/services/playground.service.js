@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-param-reassign */
 import _map from 'lodash/map';
@@ -8,32 +9,25 @@ import _get from 'lodash/get';
 import User from '../models/User';
 import ChallengeAttempt from '../models/ChallengeAttempt';
 import Challenge from '../models/Challenge';
-import { removeTestData } from '../common/playground.util';
 
-const Mongoose = require('mongoose');
-
-const { ObjectId } = Mongoose.Types;
 const PlaygroundService = {
   getTestCases: async (challengeId, problemId) => {
     console.log('Inside PlaygroundService: getTestCases', challengeId, problemId);
     try {
-      // const response = await Challenge.find(
-      //   { _id: ObjectId(challengeId) },
-      //   { problems: { $elemMatch: { _id: ObjectId(problemId) } } }
-      // );
-      const response = await Challenge.findOne({ _id: ObjectId(challengeId) });
+      const response = await Challenge.findById(challengeId);
       const { problems } = response;
-      console.log(problems);
-      const { evaluate } = _find(problems, o => {
-        return o._id == problemId;
+      const problem = _find(problems, function(prob) {
+        // eslint-disable-next-line eqeqeq
+        return prob._id == problemId;
       });
-      console.log('Challenge getTestCases successful', response);
+      const evaluate = _get(problem, 'evaluate');
       return evaluate;
     } catch (err) {
       console.log('Error in PlaygroundService: getAllChallenges', err);
       throw err;
     }
   },
+
   getAllChallenges: async projection => {
     console.log('Inside PlaygroundService: getAllChallenges');
     try {
@@ -41,6 +35,7 @@ const PlaygroundService = {
         .select(projection)
         .select(['-problems.evaluate']);
       console.log('Challenge getAllChallenges successful', response);
+      // response = removeTestData(response);
       return response;
     } catch (err) {
       console.log('Error in PlaygroundService: getAllChallenges', err);

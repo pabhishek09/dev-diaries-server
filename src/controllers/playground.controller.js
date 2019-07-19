@@ -56,7 +56,7 @@ const PlaygroundController = {
     console.log('Inside PlaygroundController: getUserAttempts');
     try {
       const userId = _get(req, 'params.user');
-      const userAttempts = await PlaygroundService.getUserAttempts(userId, '-problemsAttempted');
+      const userAttempts = await PlaygroundService.getUserAttempts(userId, '');
       console.log('Exiting PlaygroundController: getUserAttempts');
       res.send(userAttempts);
     } catch (err) {
