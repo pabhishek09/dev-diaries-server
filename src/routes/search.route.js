@@ -1,8 +1,10 @@
+import SearchController from '../controllers/searchController';
+
 const express = require('express');
 
 const router = express.Router();
-const SearchController = require('../controllers/searchController');
 
+console.log(SearchController);
 router.get('/', SearchController.returnClosestMatches);
 
 module.exports = router;
