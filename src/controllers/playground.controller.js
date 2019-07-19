@@ -6,9 +6,7 @@ const PlaygroundController = {
   getAllChallenges: async (req, res, next) => {
     console.log('Inside PlaygroundController: getAllChallenges');
     try {
-      const challenges = await PlaygroundService.getAllChallenges(
-        'name desc problemCount topScorer'
-      );
+      const challenges = await PlaygroundService.getAllChallenges();
       console.log('Exiting PlaygroundController: getAllChallenges');
       res.send(challenges);
     } catch (err) {
