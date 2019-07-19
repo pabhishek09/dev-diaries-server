@@ -37,12 +37,16 @@ const authHandler = async (req, res, next) => {
           }
         };
         const userResponse = await requestWrapper(options_user);
-        res.json(userResponse.data);
         const { createUser, findUser } = userService.default;
-        const isUserinDB = (await findUser(userResponse.data.id)).length > 0;
+        const userDataFromDB = await findUser(userResponse.data.id);
+        const isUserinDB = userDataFromDB.length > 0;
         if (!isUserinDB) {
           const createUserRes = await createUser(userResponse.data);
+          res.json({ user: userResponse.data });
+
           console.log('user successfully created', createUserRes);
+        } else {
+          res.json({ user: userDataFromDB });
         }
       } catch (err) {
         next(err);
