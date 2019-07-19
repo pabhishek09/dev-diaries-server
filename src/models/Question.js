@@ -1,9 +1,21 @@
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
 
+const { Schema } = mongoose;
+const Tag = new Schema({
+  name: { type: String }
+});
+const Reply = new Schema({
+  id: { type: Number, required: true },
+  desc: { type: String, required: true },
+  userId: { type: Number, required: true },
+  upvotes: { type: Number, required: true }
+});
 const QuestionSchema = new Schema({
-  id: { type: Schema.Types.ObjectId, required: true },
-  title: { type: String, required: true }
+  title: { type: String, required: true },
+  details: { type: String, required: true },
+  replies: [Reply],
+  askedBy: { type: String, required: true },
+  tags: [Tag]
 });
 
 const Question = mongoose.model('Question', QuestionSchema);

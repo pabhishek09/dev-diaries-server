@@ -1,13 +1,14 @@
+import _get from 'lodash/get';
 import { getScore } from '../common/playground.util';
 import PlaygroundService from '../services/playground.service';
-import _get from 'lodash/get';
 
 const PlaygroundController = {
-
   getAllChallenges: async (req, res, next) => {
     console.log('Inside PlaygroundController: getAllChallenges');
     try {
-      const challenges = await PlaygroundService.getAllChallenges('name desc problemCount topScorer');
+      const challenges = await PlaygroundService.getAllChallenges(
+        'name desc problemCount topScorer'
+      );
       console.log('Exiting PlaygroundController: getAllChallenges');
       res.send(challenges);
     } catch (err) {
@@ -25,7 +26,7 @@ const PlaygroundController = {
     } catch (err) {
       next(err);
     }
-  }, 
+  },
 
   createChallenge: async (req, res, next) => {
     console.log('Inside PlaygroundController: createChallenge');
@@ -46,7 +47,7 @@ const PlaygroundController = {
       const userId = _get(req, 'params.user');
       const userAttempts = await PlaygroundService.getUserAttempts(userId, '-problemsAttempted');
       console.log('Exiting PlaygroundController: getUserAttempts');
-      res.send(createChallengeRes);
+      res.send(userAttempts);
     } catch (err) {
       next(err);
     }
@@ -59,7 +60,7 @@ const PlaygroundController = {
       const challengeId = _get(req, 'params.id');
       const challengeAttempts = await PlaygroundService.getChallengeAttempt(userId, challengeId);
       console.log('Exiting PlaygroundController: getChallengeAttempt');
-      res.send(createChallengeRes);
+      res.send(challengeAttempts);
     } catch (err) {
       next(err);
     }
@@ -70,8 +71,8 @@ const PlaygroundController = {
     try {
       const solutionBody = req.body;
       console.log(solutionBody);
-      const solution = solutionBody.solution;
-      const userId = solutionBody.userId;
+      const { solution } = solutionBody;
+      const { userId } = solutionBody;
       const score = getScore(solution, solutionBody.fnName, solutionBody.evaluate);
       // Payload is created assuming this to be user's first problem solution in a challenge
       const challengeAttempt = {
@@ -88,23 +89,33 @@ const PlaygroundController = {
         }
       };
       console.log('Challenge attempt body', challengeAttempt);
-      const pastChallengeAttempt = await PlaygroundService.getChallengeAttempt(challengeAttempt.challengeId, userId);
-      const attemptResponse = await PlaygroundService.handleChallengeAttempt(challengeAttempt, pastChallengeAttempt);
+      const pastChallengeAttempt = await PlaygroundService.getChallengeAttempt(
+        challengeAttempt.challengeId,
+        userId
+      );
+      const attemptResponse = await PlaygroundService.handleChallengeAttempt(
+        challengeAttempt,
+        pastChallengeAttempt
+      );
       console.log('Attempt response', attemptResponse);
       const userAttempts = await PlaygroundService.getUserAttempts(userId, '-problemsAttempted');
       await PlaygroundService.updateUserScore(userId, userAttempts);
       const userScore = attemptResponse.score;
       if (userScore > solutionBody.topScore) {
-        await PlaygroundService.updateChallengeTopScore(solutionBody.challengeId, userId, userScore);
+        await PlaygroundService.updateChallengeTopScore(
+          solutionBody.challengeId,
+          userId,
+          userScore
+        );
       }
       console.log('Exiting PlaygroundController: submitAttempt');
       res.send(attemptResponse);
     } catch (err) {
       next(err);
     }
-  }, 
+  },
 
-  leaderboard: async(req, res, next) => {
+  leaderboard: async (req, res, next) => {
     console.log('Inside PlaygroundController: leaderboard');
     try {
       const leaderboardRes = await PlaygroundService.leaderboard();
@@ -112,7 +123,7 @@ const PlaygroundController = {
       res.send(leaderboardRes);
     } catch (err) {
       next(err);
-    }    
+    }
   }
 };
 

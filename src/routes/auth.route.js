@@ -1,35 +1,24 @@
-const express = require('express');
-const randomString = require('randomstring');
+import express from 'express';
+import authHandler from '../controllers/authController';
+
 require('dotenv').config({ path: `${process.cwd()}/.env` });
+
 const config = process.env;
 const router = express.Router();
-const authHandler = require('../controllers/authController');
 const qs = require('querystring');
-router.get('/', (req, res) => {
-  authHandler(req, res);
-});
+
+router.get('/', authHandler);
 
 router.get('/login', (req, res) => {
-  console.log(
-    'how',
-    `https://github.com/login/oauth/authorize?${qs.stringify({
-      client_id: config.client_id,
-      redirect_uri: config.redirect_url,
-      state: req.session.csrf_string,
-      scope: 'user'
-    })}`
-  );
   // generate that csrf_string for state param
-  req.session.csrf_string = randomString.generate();
+  // req.session.csrf_string = randomString.generate();
   // construct the GitHub URL
-  const githubAuthUrl = `https://github.com/login/oauth/authorize?${qs.stringify(
-    {
-      client_id: config.client_id,
-      redirect_uri: config.redirect_url,
-      state: req.session.csrf_string,
-      scope: 'user'
-    }
-  )}`;
+  const githubAuthUrl = `https://github.com/login/oauth/authorize?${qs.stringify({
+    client_id: config.client_id,
+    redirect_uri: config.redirect_url,
+    // state: req.session.csrf_string,
+    scope: 'user'
+  })}`;
   console.log('githubAuthUrl', githubAuthUrl);
   // redirect user with express
   res.redirect(githubAuthUrl);

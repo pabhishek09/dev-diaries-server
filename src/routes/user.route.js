@@ -1,8 +1,8 @@
 import express from 'express';
+import UserController from '../controllers/user.controller';
+
 const router = express.Router();
 
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
+router.get('/:id', UserController.findUser);
+router.put('/:id/updateUserScore', UserController.updateUserScore);
 export default router;

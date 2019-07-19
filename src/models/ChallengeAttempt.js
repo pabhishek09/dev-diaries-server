@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const ProblemAttemptSchema = new Schema({
   problemId: { type: String, required: true },
@@ -14,7 +15,7 @@ const ChallengeAttemptSchema = new Schema({
   name: { type: String, required: true },
   score: { type: Number, required: true },
   problemCount: { type: Number, required: true },
-  problemsAttempted: [ ProblemAttemptSchema ]
+  problemsAttempted: [ProblemAttemptSchema]
 });
 
 const ChallengeAttempt = mongoose.model('ChallengeAttempt', ChallengeAttemptSchema);

@@ -1,12 +1,14 @@
 import express from 'express';
 import dotenv from 'dotenv';
-dotenv.config();
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import apiRouter from './routes/index';
+import errorResponses from './common/errorResponses';
+
+dotenv.config();
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 const db = mongoose.connection;
@@ -20,9 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const corsOptions =
-  process.env.NODE_ENV === 'prod'
-    ? { origin: 'https://dev-diaries.netlify.com' }
-    : {};
+  process.env.NODE_ENV === 'prod' ? { origin: 'https://dev-diaries.netlify.com' } : {};
 app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,11 +33,11 @@ app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  next(errorResponses.NotFound);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   console.log('Error Handler');
   res.locals.message = err.message;

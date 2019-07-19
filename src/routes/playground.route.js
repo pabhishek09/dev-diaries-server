@@ -1,5 +1,6 @@
 import express from 'express';
 import PlaygroundController from '../controllers/playground.controller';
+
 const router = express.Router();
 
 router.get('/challenges', PlaygroundController.getAllChallenges);

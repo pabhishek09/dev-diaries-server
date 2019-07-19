@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
-const Schema = mongoose.Schema;
 
-const ParamsSchema = new Schema({ 
+const { Schema } = mongoose;
+
+const ParamsSchema = new Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
   desc: { type: String, required: true }
@@ -9,7 +10,7 @@ const ParamsSchema = new Schema({
 
 const SignatureSchema = new Schema({
   fnName: { type: String, required: true },
-  params: { type: [ ParamsSchema ], required: true }
+  params: { type: [ParamsSchema], required: true }
 });
 
 const ScorerSchema = new Schema({
@@ -17,10 +18,12 @@ const ScorerSchema = new Schema({
   score: { type: Number, required: true }
 });
 
-const EvaluateSchema = [ new Schema({
-  args: [ Schema.Types.Mixed ],
-  return: Schema.Types.Mixed
-})];
+const EvaluateSchema = [
+  new Schema({
+    args: [Schema.Types.Mixed],
+    return: Schema.Types.Mixed
+  })
+];
 
 const ProblemSchema = new Schema({
   name: { type: String, required: true },
@@ -35,7 +38,7 @@ const ChallengeSchema = new Schema({
   desc: { type: String, required: true },
   topScorer: ScorerSchema,
   problemCount: Number,
-  problems: [ ProblemSchema ]
+  problems: [ProblemSchema]
 });
 
 const Challenge = mongoose.model('Challenge', ChallengeSchema);
