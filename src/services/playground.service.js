@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-param-reassign */
 import _map from 'lodash/map';
@@ -8,17 +9,16 @@ import _get from 'lodash/get';
 import User from '../models/User';
 import ChallengeAttempt from '../models/ChallengeAttempt';
 import Challenge from '../models/Challenge';
-import { removeTestData } from '../common/playground.util';
 
 const PlaygroundService = {
-
   getTestCases: async (challengeId, problemId) => {
     console.log('Inside PlaygroundService: getTestCases', challengeId, problemId);
     try {
       const response = await Challenge.findById(challengeId);
-      const problems = response.problems;
-      const problem = _find(problems, function(problem) {
-        return problem._id == problemId;
+      const { problems } = response;
+      const problem = _find(problems, function(prob) {
+        // eslint-disable-next-line eqeqeq
+        return prob._id == problemId;
       });
       const evaluate = _get(problem, 'evaluate');
       return evaluate;
@@ -31,7 +31,9 @@ const PlaygroundService = {
   getAllChallenges: async projection => {
     console.log('Inside PlaygroundService: getAllChallenges');
     try {
-      let response = await Challenge.find().select(projection);
+      const response = await Challenge.find()
+        .select(projection)
+        .select(['-problems.evaluate']);
       console.log('Challenge getAllChallenges successful', response);
       // response = removeTestData(response);
       return response;
@@ -44,8 +46,7 @@ const PlaygroundService = {
   getChallengeById: async challengeId => {
     console.log('Inside PlaygroundService: getChallengeById', challengeId);
     try {
-      let response = await Challenge.findById(challengeId);
-      // response = removeTestData([response]);
+      const response = await Challenge.findById(challengeId).select(['-problems.evaluate']);
       console.log('Challenge getChallengeById successful', response);
       return response;
     } catch (err) {

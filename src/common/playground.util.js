@@ -3,8 +3,6 @@
 /* eslint-disable prefer-spread */
 import * as Babel from '@babel/standalone/babel.min';
 
-const { pick } = require('lodash');
-
 const transpileCode = str => {
   let transpiledCode;
   try {
@@ -39,14 +37,5 @@ const getScore = (code, name, expectations) => {
     throw err;
   }
 };
-const removeTestData = function(data) {
-  const result = data.map(challenge => {
-    challenge.problems = challenge.problems.map(problem => {
-      problem = pick(problem, ['name', 'order', 'desc', 'signature']);
-      return problem;
-    });
-    return challenge;
-  });
-  return result;
-};
-export { getScore, removeTestData };
+
+export { getScore };
