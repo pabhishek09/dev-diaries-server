@@ -8,11 +8,13 @@ const Reply = new Schema({
   id: { type: Number, required: true },
   desc: { type: String, required: true },
   userId: { type: Number, required: true },
-  upvotes: { type: Number, required: true }
+  upvotes: { type: Number, required: true },
+  postedDateTime: { type: String, required: true }
 });
 const QuestionSchema = new Schema({
   title: { type: String, required: true },
   details: { type: String, required: true },
+  postedDateTime: { type: String, required: true },
   replies: [Reply],
   askedBy: { type: String, required: true },
   tags: [Tag]

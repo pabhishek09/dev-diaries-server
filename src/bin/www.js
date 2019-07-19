@@ -7,30 +7,6 @@
 import debugLib from 'debug';
 import http from 'http';
 import app from '../app';
-
-const debug = debugLib('dev-diaries-server:server');
-
-/**
- * Get port from environment and store in Express.
- */
-
-const port = normalizePort(process.env.PORT || '4000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-const server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -38,6 +14,7 @@ server.on('listening', onListening);
 function normalizePort(val) {
   const port = parseInt(val, 10);
 
+  // eslint-disable-next-line no-restricted-globals
   if (isNaN(port)) {
     // named pipe
     return val;
@@ -50,7 +27,18 @@ function normalizePort(val) {
 
   return false;
 }
+/**
+ * Get port from environment and store in Express.
+ */
 
+const port = normalizePort(process.env.PORT || '4000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
 /**
  * Event listener for HTTP server "error" event.
  */
@@ -76,6 +64,7 @@ function onError(error) {
       throw error;
   }
 }
+const debug = debugLib('dev-diaries-server:server');
 
 /**
  * Event listener for HTTP server "listening" event.
@@ -86,3 +75,12 @@ function onListening() {
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
   debug(`Listening on ${bind}`);
 }
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+module.exports = server;

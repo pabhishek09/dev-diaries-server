@@ -1,4 +1,5 @@
 /* eslint-disable consistent-return */
+// eslint-disable-next-line import/no-unresolved
 import recommender from 'recommender';
 import QuestionsService from '../services/questions.service';
 import errorResponses from '../common/errorResponses';
