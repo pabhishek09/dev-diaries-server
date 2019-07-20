@@ -6,7 +6,6 @@ import logger from 'morgan';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import apiRouter from './routes/index';
-import errorResponses from './common/errorResponses';
 
 dotenv.config();
 

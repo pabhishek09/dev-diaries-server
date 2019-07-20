@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import recommender from 'recommender';
+import recommender from 'lodash';
 import QuestionsService from '../services/questions.service';
 
 // get the list of questions from mongo

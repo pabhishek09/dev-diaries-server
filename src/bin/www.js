@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-restricted-globals */
 
 /**
  * Module dependencies.
@@ -13,28 +14,6 @@ const debug = debugLib('dev-diaries-server:server');
 /**
  * Get port from environment and store in Express.
  */
-
-const port = normalizePort(process.env.PORT || '4000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-const server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
 function normalizePort(val) {
   const port = parseInt(val, 10);
 
@@ -50,11 +29,18 @@ function normalizePort(val) {
 
   return false;
 }
+const port = normalizePort(process.env.PORT || '4000');
+app.set('port', port);
 
 /**
- * Event listener for HTTP server "error" event.
+ * Create HTTP server.
  */
 
+const server = http.createServer(app);
+module.exports = server;
+/**
+ * Listen on provided port, on all network interfaces.
+ */
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -86,3 +72,15 @@ function onListening() {
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
   debug(`Listening on ${bind}`);
 }
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
