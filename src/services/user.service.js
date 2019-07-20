@@ -45,22 +45,22 @@ const UserService = {
     }
   },
   updateUserScore: async (id, scoreData) => {
-    console.log('Inside UserSearvice: updateUserScore', id,  scoreData);
+    console.log('Inside UserSearvice: updateUserScore', id, scoreData);
     let response;
     try {
       console.log('Question body', scoreData);
       if (scoreData.type && scoreData.type.toLowerCase() === 'forum') {
         response = await User.update(
           { _id: id },
-          { $inc: { 'forumProfile.score': scoreData.score } },
+          { $set: { 'forumProfile.score': scoreData.score } },
           {
             new: true
           }
         );
       } else if (scoreData.type && scoreData.type.toLowerCase() === 'playground') {
         response = await User.update(
-          { _id:  id },
-          { $inc: { 'playgroundProfile.score': scoreData.score } },
+          { _id: id },
+          { $set: { 'playgroundProfile.score': scoreData.score } },
           {
             new: true
           }
