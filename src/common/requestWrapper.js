@@ -16,6 +16,7 @@ const apiWrapper = options => {
       resolve(response);
     } catch (error) {
       console.log('API failed:', options.url);
+      console.log('API failed:', error);
       reject(error.response);
     }
   });

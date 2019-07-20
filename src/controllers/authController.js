@@ -10,7 +10,7 @@ const authHandler = async (req, res, next) => {
     const { client_id, client_secret, redirect_uri, token_url } = config;
     // configure request params
     const options = {
-      method: 'POST',
+      method: 'GET',
       url: `${token_url}?${qs.stringify({
         client_id,
         client_secret,
@@ -18,19 +18,22 @@ const authHandler = async (req, res, next) => {
         redirect_uri
         // state: req && req.session ? req.session.csrf_string : null
       })}`,
-      headers: {
-        accept: 'application/json'
-      }
+      // headers: {
+      //   accept: 'application/json'
+      // }
     };
     console.log('request', options);
 
     const { data } = await requestWrapper(options);
-    console.log('authresponse', data);
+    console.log('authresponse', data, typeof data);
+
     if (data) {
+      const access_token = /access_token=([^&#]*)/.exec(data)[1];
+      console.log('***', access_token);
       try {
         const options_user = {
           method: 'GET',
-          url: `${config.user_url}?access_token=${data.access_token}`,
+          url: `${config.user_url}?access_token=${access_token}`,
           headers: {
             accept: 'application/json',
             'User-Agent': 'custom'
@@ -41,11 +44,12 @@ const authHandler = async (req, res, next) => {
         const userDataFromDB = await findUser(userResponse.data.id);
         const isUserinDB = userDataFromDB.length > 0;
         if (!isUserinDB) {
+          console.log('User is not present', userResponse.data);
           const createUserRes = await createUser(userResponse.data);
           res.json({ user: userResponse.data });
-
           console.log('user successfully created', createUserRes);
         } else {
+          console.log('User already exists', userDataFromDB);
           res.json({ user: userDataFromDB });
         }
       } catch (err) {
@@ -55,7 +59,7 @@ const authHandler = async (req, res, next) => {
     // make a request for auth_token using above options
   } catch (error) {
     // console.log('Internal Error', error);
-    next(error);
+    // next(error);
     res.status(403).json(errorResponses.Unauthenticated);
   }
 };

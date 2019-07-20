@@ -13,12 +13,12 @@ const UserSchema = new Schema({
   login: { type: String, required: true },
   id: { type: Number, required: true },
   node_id: { type: String, required: true },
-  avatar_url: { type: String, required: true },
-  gravatar_id: { type: String },
-  url: { type: String, required: true },
-  html_url: { type: String, required: true },
-  gists_url: { type: String, required: true },
-  email: { type: String, required: true },
+  avatar_url: String,
+  gravatar_id: String,
+  url: String,
+  html_url: String,
+  gists_url: String,
+  email: String,
   playgroundProfile: PlaygroundProfile,
   forumProfile: PlaygroundProfile
 });

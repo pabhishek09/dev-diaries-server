@@ -11,14 +11,14 @@ const UserController = {
       if (userData.length > 0) {
         res.send({ user: userData[0] });
       } else {
-        console.log('User Not found');
-        res.status(404).json(errorResponses.NotFound);
+        res.send({});
       }
     } catch (err) {
-      console.log('somethings up with the findUser');
+      console.log('Error in find user', err);
       next(err);
     }
   },
+  
   updateUserScore: async (req, res, next) => {
     try {
       const uid = _get(req, 'params.id', req.body);
@@ -29,7 +29,7 @@ const UserController = {
       }
       res.send({ user: userData });
     } catch (err) {
-      console.log('somethings up with the findUser');
+      console.log('Error in update user score', err);
       next(err);
     }
   }

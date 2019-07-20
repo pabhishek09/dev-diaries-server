@@ -32,16 +32,16 @@ app.use(cookieParser());
 app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(errorResponses.NotFound);
-});
+// app.use(function(req, res, next) {
+//   next(errorResponses.NotFound);
+// });
 
 // error handler
 app.use(function(err, req, res) {
   // set locals, only providing error in development
   console.log('Error Handler');
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
   console.log(err);
   res.status(err.status || 500).send('Something broke!');
 });
