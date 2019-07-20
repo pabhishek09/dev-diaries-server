@@ -1,11 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-duplicates */
 /* eslint-disable no-param-reassign */
+import UserService from './user.service';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
-import _reduce from 'lodash/map';
+import _reduce from 'lodash/reduce';
 import _findIndex from 'lodash/findIndex';
 import _get from 'lodash/get';
+import _forEach from 'lodash/forEach';
 import User from '../models/User';
 import ChallengeAttempt from '../models/ChallengeAttempt';
 import Challenge from '../models/Challenge';
@@ -177,12 +179,14 @@ const PlaygroundService = {
     try {
       const userScore = _reduce(
         userAttempts,
-        sum => {
-          return sum + userAttempts.score;
+        (sum, userAttempt) => {
+          return sum + userAttempt.score;
         },
         0
       );
       console.log('User score', userScore);
+      const updateScoreRes = await UserService.updateUserScore(userId, {type: 'playground', score: userScore});
+      console.log('Update user score res', updateScoreRes);
       return userScore;
     } catch (err) {
       console.log('Error in PlaygroundService: updateUserScore', err);
@@ -206,13 +210,13 @@ const PlaygroundService = {
 
   leaderboard: async () => {
     console.log('Inside PlaygroundService: leaderboard');
-    let response;
     try {
-      response = await User.find()
-        .sort({ field: 'playgroundProfile.score', test: -1 })
-        .limit(3);
-      console.log('Get leaderboard successful', response);
-      return response;
+      let allUsers = await User.find({}, '_id playgroundProfile avatar_url login html_url');
+      console.log('All users', allUsers);
+      let sortedUsersList = allUsers.sort((prevUser, nextUser) => {
+        return nextUser.playgroundProfile.score - prevUser.playgroundProfile.score;
+      });
+      return sortedUsersList;
     } catch (err) {
       console.log('Error in PlaygroundService: leaderboard', err);
       throw err;
